@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    >
+
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="歌曲名"
+        android:textSize="20sp"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/song_name"
+
+        />
+
+
+</RelativeLayout>
+
+</android.support.v7.widget.CardView>
