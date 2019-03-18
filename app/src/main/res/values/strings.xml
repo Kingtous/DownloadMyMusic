@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">下了它吧</string>
+    <string name="app_name">音量手动增强器</string>
     <string name="title_home">搜索</string>
     <string name="title_dashboard">下载进度</string>
     <string name="title_notifications">文件管理</string>
