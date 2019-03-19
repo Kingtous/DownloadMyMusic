@@ -1,6 +1,7 @@
 package cn.kingtous.downloadit;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -9,6 +10,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -21,10 +25,6 @@ import cn.kingtous.downloadit.Fragment.SearchFragment;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-
-
-
-
 
     int WRITE_PERMISSION=1;
 
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         setContentView(R.layout.activity_main);
 
         frameLayout=findViewById(R.id.Frame);
-
 
         switchFragment(searchFragment);
 
