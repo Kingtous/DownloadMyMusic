@@ -140,6 +140,10 @@ public class SearchActivity extends AppCompatActivity {
 
     public void down(){
 
+        if (fcgModel.getData().getItems().get(0).getVkey().equals("")){
+            Toast.makeText(SearchActivity.this,"没有获取到有效的vkey,该歌曲无法下载",Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl("http://dl.stream.qqmusic.qq.com/")
@@ -202,7 +206,12 @@ public class SearchActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 })
-                                .setNegativeButton("取消",null)
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
                                 .show();
 
                     }

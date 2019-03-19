@@ -53,4 +53,13 @@ public class SearchFragment extends Fragment {
 
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==SONG_SEARCH_CODE){
+            return;
+        }
+
+    }
 }
