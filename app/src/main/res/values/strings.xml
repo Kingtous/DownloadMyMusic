@@ -3,4 +3,5 @@
     <string name="title_home">搜索</string>
     <string name="title_dashboard">下载进度</string>
     <string name="title_notifications">文件管理</string>
+    <string name="progressnow">当前进度：</string>
 </resources>
