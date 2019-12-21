@@ -14,11 +14,17 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import cn.kingtous.downloadit.Model.SearchResultModel;
 import cn.kingtous.downloadit.Model.fcgModel;
@@ -131,18 +137,13 @@ public class SearchActivity extends Activity {
 
     }
 
-
-    public void down(){
-        if (fcgModel.getData().getItems().get(0).getVkey().equals("")){
-            Toast.makeText(SearchActivity.this,"没有获取到有效的vkey,该歌曲无法下载",Toast.LENGTH_LONG).show();
-            finish();
-        }
-        final String songName=searchResultModel.getData().getSong().getList().get(0).getSongname();
+    public void downByIndex(int index){
+        final String songName=searchResultModel.getData().getSong().getList().get(index).getSongname();
         //歌曲api-key
-        String s="C400"+searchResultModel.getData().getSong().getList().get(0).getMedia_mid()+".m4a" +
-                        "?vkey=" +
-                        fcgModel.getData().getItems().get(0).getVkey() +
-                        "&guid=8208467632&uin=0&fromtag=66";
+        String s="C400"+searchResultModel.getData().getSong().getList().get(index).getMedia_mid()+".m4a" +
+                "?vkey=" +
+                fcgModel.getData().getItems().get(index).getVkey() +
+                "&guid=8208467632&uin=0&fromtag=66";
         String state = Environment.getExternalStorageState();
         final String path;
         if(state.equals(Environment.MEDIA_MOUNTED)){
@@ -165,30 +166,30 @@ public class SearchActivity extends Activity {
             public void onFinishDownload() {
                 dialog.dismiss();
                 Toast.makeText(SearchActivity.this,"下载完成，存放位置：\n"+path+songName+extName,Toast.LENGTH_LONG).show();
-                        new AlertDialog.Builder(SearchActivity.this)
-                                .setTitle("下载完成")
-                                .setMessage("需要立即打开吗？")
-                                .setPositiveButton("打开", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        File file=new File(path+songName+extName);
-                                        Intent intent = new Intent("android.intent.action.VIEW");
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        intent.putExtra("oneshot", 0);
-                                        intent.putExtra("configchange", 0);
-                                        Uri uri = Uri.fromFile(file);
-                                        intent.setDataAndType(uri, "audio/*");
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                })
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                })
-                                .show();
+                new AlertDialog.Builder(SearchActivity.this)
+                        .setTitle("下载完成")
+                        .setMessage("需要立即打开吗？")
+                        .setPositiveButton("打开", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                File file=new File(path+songName+extName);
+                                Intent intent = new Intent("android.intent.action.VIEW");
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra("oneshot", 0);
+                                intent.putExtra("configchange", 0);
+                                Uri uri = Uri.fromFile(file);
+                                intent.setDataAndType(uri, "audio/*");
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
             }
 
             @Override
@@ -213,5 +214,43 @@ public class SearchActivity extends Activity {
                 downloadListener.onFinishDownload();
             }
         });
+    }
+
+    public void down(){
+        if (fcgModel.getData().getItems().get(0).getVkey().equals("")){
+            Toast.makeText(SearchActivity.this,"没有获取到有效的vkey,该歌曲无法下载",Toast.LENGTH_LONG).show();
+            finish();
+        }
+        List<cn.kingtous.downloadit.Model.fcgModel.DataBean.ItemsBean> bean =  fcgModel.getData().getItems();
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i=0;i<bean.size();i++){
+            arrayList.add(searchResultModel.getData().getSong().getList().get(i).getSongname()+"-"+searchResultModel.getData().getSong().getList().get(i).getSinger().get(0).getName());
+        }
+        String[] strings = arrayList.toArray(new String[arrayList.size()]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,android.R.layout.simple_list_item_1,strings
+        );
+        View v = LayoutInflater.from(this).inflate(R.layout.list_result,null);
+        ListView lv = v.findViewById(R.id.lv_result);
+        lv.setAdapter(adapter);
+        final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("点击下载")
+                .setView(v)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .create();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                downByIndex(position);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

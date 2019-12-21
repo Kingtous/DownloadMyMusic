@@ -1,5 +1,7 @@
 package cn.kingtous.downloadit.Model;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class fcgModel {
